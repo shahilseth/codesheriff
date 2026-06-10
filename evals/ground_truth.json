@@ -1,0 +1,75 @@
+[
+  {
+    "id": "phase1-chunking",
+    "question": "How does the chunker decide where to split a Python file into chunks?",
+    "expected_files": ["backend/indexer/chunker.py"],
+    "expected_keywords": ["tree-sitter", "function", "class"],
+    "min_confidence": 0.5
+  },
+  {
+    "id": "phase1-embedding",
+    "question": "What embedding model does CodeSheriff use to turn code chunks into vectors, and why was it chosen?",
+    "expected_files": ["backend/indexer/embedder.py"],
+    "expected_keywords": ["all-MiniLM-L6-v2", "sentence-transformers", "local"],
+    "min_confidence": 0.35
+  },
+  {
+    "id": "phase2-retrieval",
+    "question": "How does the Navigator agent retrieve relevant code chunks for a question?",
+    "expected_files": ["backend/agents/navigator.py"],
+    "expected_keywords": ["semantic search", "ChromaDB", "embedding"],
+    "min_confidence": 0.5
+  },
+  {
+    "id": "phase2-commits",
+    "question": "How does CodeSheriff find git commits that are relevant to a question?",
+    "expected_files": ["backend/utils/git_utils.py"],
+    "expected_keywords": ["git log", "commits", "files_changed"],
+    "min_confidence": 0.5
+  },
+  {
+    "id": "phase3-analyst-role",
+    "question": "What is the Analyst agent responsible for, and what is it explicitly not allowed to do?",
+    "expected_files": ["backend/agents/analyst.py"],
+    "expected_keywords": ["reasoning", "hypothesis", "retrieve"],
+    "min_confidence": 0.5
+  },
+  {
+  "id": "phase3-confidence-hint",
+  "question": "What fields does AnalystOutput contain and what does each field represent?",
+  "expected_files": ["backend/models/schemas.py"],
+  "expected_keywords": ["hypothesis", "reasoning", "evidence", "confidence_hint", "reasoning_gaps"],
+  "min_confidence": 0.45,
+  "notes": "Tests whether the system can describe its own data models from code"
+  },
+  {
+    "id": "phase4-critic-adjustment",
+    "question": "What does the Critic agent check, and what range of values can confidence_adjustment take?",
+    "expected_files": ["backend/agents/critic.py"],
+    "expected_keywords": ["confidence_adjustment", "-0.3", "0.1"],
+    "min_confidence": 0.5
+  },
+  {
+  "id": "phase4-challenge-types",
+  "question": "How is CriticChallenge structured and what fields does it contain?",
+  "expected_files": ["backend/models/schemas.py"],
+  "expected_keywords": ["challenge_type", "severity", "description", "checkable_by"],
+  "min_confidence": 0.45,
+  "notes": "Tests retrieval of Critic data model definition"
+  },
+  {
+  "id": "phase5-confidence-combination",
+  "question": "How does the Orchestrator combine the Analyst and Critic outputs into a final confidence score?",
+  "expected_files": ["backend/orchestrator/orchestrator.py"],
+  "expected_keywords": ["confidence", "analyst", "critic", "clamp"],
+  "min_confidence": 0.40,
+  "notes": "Tests whether orchestration logic is retrievable and explainable"
+},
+  {
+    "id": "phase5-trace-storage",
+    "question": "How are query traces stored in the database, and what does the trace lookup endpoint return?",
+    "expected_files": ["backend/db/postgres.py", "backend/main.py"],
+    "expected_keywords": ["full_trace", "JSONB", "trace_id"],
+    "min_confidence": 0.5
+  }
+]

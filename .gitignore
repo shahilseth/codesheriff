@@ -1,0 +1,29 @@
+# Python
+.env
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+dist/
+*.egg-info/
+
+# Project-specific
+chroma_db/
+out/
+evals/eval_results/
+TALKING_POINTS.md
+
+# Frontend
+node_modules/
+frontend/dist/
+frontend/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
