@@ -12,6 +12,8 @@ design intent, has a second model adversarially check that reasoning for
 gaps, and gives you a final answer with a confidence score and the exact
 files it's based on.
 
+![CodeSheriff UI](screenshot.png)
+
 ## Architecture
 
 CodeSheriff runs every question through a fixed four-agent pipeline,
