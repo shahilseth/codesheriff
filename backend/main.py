@@ -2,6 +2,7 @@
 
 import logging
 import os
+import shutil
 import uuid
 from contextlib import asynccontextmanager
 
@@ -19,6 +20,7 @@ from backend.models.schemas import (
     QueryResponse,
 )
 from backend.orchestrator.orchestrator import Orchestrator
+from backend.utils.repo_loader import resolve_repo_path
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -51,10 +53,18 @@ async def health() -> dict:
 @app.post("/api/index")
 async def index(request: IndexRequest) -> dict:
     try:
-        summary = index_repo(request.repo_path)
+        repo_path, should_cleanup = resolve_repo_path(request.repo_url, request.repo_path)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail={"error": str(e)})
+
+    try:
+        summary = index_repo(repo_path, repo_name=request.repo_name)
     except Exception:
-        logger.error("Indexing failed for repo_path=%r", request.repo_path, exc_info=True)
+        logger.error("Indexing failed for repo_path=%r", repo_path, exc_info=True)
         raise HTTPException(status_code=500, detail={"error": "Indexing failed."})
+    finally:
+        if should_cleanup:
+            shutil.rmtree(repo_path, ignore_errors=True)
 
     return {
         "status": "indexed",
@@ -71,7 +81,7 @@ async def query(request: QueryRequest) -> QueryResponse:
         async with engine.connect() as conn:
             db_session_id = await create_session(conn, request.repo_name)
 
-            orchestrator = Orchestrator(repo_path=request.repo_path, repo_name=request.repo_name)
+            orchestrator = Orchestrator(repo_path=request.repo_path or "", repo_name=request.repo_name)
             synthesiser_output, _analyst_output, _critic_output, trace = await orchestrator.run(
                 request.question
             )

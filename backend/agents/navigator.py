@@ -8,6 +8,7 @@ question -- that's the Analyst's job (Phase 3).
 
 import fnmatch
 import os
+from typing import Optional
 
 from dotenv import load_dotenv
 from groq import Groq
@@ -25,7 +26,7 @@ _GROQ_MODEL = "llama-3.1-8b-instant"
 class Navigator:
     """Retrieves relevant code chunks and commit history for a question."""
 
-    def __init__(self, repo_path: str, persist_dir: str | None = None):
+    def __init__(self, repo_path: str, persist_dir: Optional[str] = None):
         self.repo_path = repo_path
         self._client = get_client(persist_dir)
 

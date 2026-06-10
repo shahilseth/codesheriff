@@ -11,12 +11,15 @@ _LOG_FORMAT = f"{_RECORD_SEP}%H{_FIELD_SEP}%s{_FIELD_SEP}%an{_FIELD_SEP}%aI"
 
 
 def _run_git_log(repo_path: str, args: list[str]) -> str:
-    result = subprocess.run(
-        ["git", "log", *args],
-        cwd=repo_path,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            ["git", "log", *args],
+            cwd=repo_path,
+            capture_output=True,
+            text=True,
+        )
+    except OSError:
+        return ""
     if result.returncode != 0:
         return ""
     return result.stdout

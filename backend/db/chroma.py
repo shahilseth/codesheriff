@@ -5,6 +5,7 @@ server to run.
 """
 
 from pathlib import Path
+from typing import Optional, Union
 
 import chromadb
 from chromadb.config import Settings
@@ -13,7 +14,7 @@ from chromadb.config import Settings
 _DEFAULT_PERSIST_DIR = Path(__file__).resolve().parents[2] / "out" / "chroma"
 
 
-def get_client(persist_dir: str | Path | None = None) -> chromadb.ClientAPI:
+def get_client(persist_dir: Optional[Union[str, Path]] = None) -> chromadb.ClientAPI:
     """Get a persistent ChromaDB client, creating the storage folder if needed."""
     persist_dir = Path(persist_dir) if persist_dir else _DEFAULT_PERSIST_DIR
     persist_dir.mkdir(parents=True, exist_ok=True)

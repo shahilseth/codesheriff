@@ -87,7 +87,10 @@ npm install
 npm run dev
 ```
 
-Then open `http://localhost:5173`.
+Then open `http://localhost:5173`. The UI walks through two steps — index a
+repo (GitHub URL or local path, auto-detected), then ask a question — and
+shows the synthesised answer with a confidence bar, cited files, known gaps,
+and a collapsible trace of all four agents plus latency breakdown.
 
 ## Project structure
 
@@ -106,7 +109,10 @@ codesheriff/
     eval_runner.py      # Runs the eval set against a live backend, scores results
     eval_results/        # Timestamped eval run reports (gitignored)
   frontend/
-    src/            # React app: ask form, answer view, trace viewer
+    src/
+      components/   # Header, IndexForm, AskForm, AnswerView, TraceViewer, icons
+      api.js        # fetch wrappers for /api/index, /api/query, /api/trace, /health
+      App.jsx        # state machine: setup -> indexing -> ready -> asking -> result
   scripts/          # CLI entry points and integration tests
   out/              # Generated ChromaDB persistence (gitignored)
 ```

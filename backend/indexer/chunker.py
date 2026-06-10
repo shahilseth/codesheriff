@@ -7,6 +7,7 @@ instead of arbitrary fixed-size text windows.
 """
 
 from dataclasses import dataclass
+from typing import Optional
 
 from tree_sitter import Language, Parser
 import tree_sitter_python as tspython
@@ -66,7 +67,7 @@ def chunk_python_file(source: str, file_name: str) -> list[Chunk]:
     return chunks
 
 
-def _node_name(node) -> str | None:
+def _node_name(node) -> Optional[str]:
     """Find the identifier directly under a function/class definition node."""
     for child in node.children:
         if child.type == "identifier":
@@ -74,7 +75,7 @@ def _node_name(node) -> str | None:
     return None
 
 
-def _build_module_chunk(source_bytes: bytes, ranges: list[tuple[int, int]], file_name: str) -> Chunk | None:
+def _build_module_chunk(source_bytes: bytes, ranges: list[tuple[int, int]], file_name: str) -> Optional[Chunk]:
     """Bundle leftover top-level code (imports, constants, etc) into one chunk."""
     pieces = [source_bytes[start:end].decode("utf-8") for start, end in ranges]
     text = "\n".join(piece for piece in pieces if piece.strip())

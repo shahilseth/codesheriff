@@ -4,11 +4,13 @@ Uses all-MiniLM-L6-v2: small, fast, runs on CPU/Apple Silicon, no API key
 or network calls needed after the first download.
 """
 
+from typing import Optional
+
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
 _MODEL_NAME = "all-MiniLM-L6-v2"
-_model: SentenceTransformer | None = None
+_model: Optional[SentenceTransformer] = None
 
 
 def _get_model() -> SentenceTransformer:

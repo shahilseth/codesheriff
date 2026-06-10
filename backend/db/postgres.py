@@ -6,6 +6,7 @@ ceremony without benefit.
 """
 
 import uuid
+from typing import Optional
 
 from sqlalchemy import (
     Column,
@@ -58,7 +59,7 @@ async def create_session(conn: AsyncConnection, repo_name: str) -> str:
     return str(session_id)
 
 
-async def get_trace(conn: AsyncConnection, trace_id: uuid.UUID) -> dict | None:
+async def get_trace(conn: AsyncConnection, trace_id: uuid.UUID) -> Optional[dict]:
     """Fetch a trace's full_trace JSON by id, or None if it doesn't exist."""
     result = await conn.execute(traces.select().where(traces.c.id == trace_id))
     row = result.fetchone()

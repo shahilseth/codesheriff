@@ -2,6 +2,7 @@
 
 import subprocess
 from pathlib import Path
+from typing import Optional
 
 from backend.db.chroma import get_client, reset_collection
 from backend.indexer.chunker import chunk_python_file
@@ -35,10 +36,10 @@ def find_python_files(repo_path: Path) -> list[Path]:
     return files
 
 
-def index_repo(repo_path: str, persist_dir: str | None = None) -> dict:
+def index_repo(repo_path: str, persist_dir: Optional[str] = None, repo_name: Optional[str] = None) -> dict:
     """Index a local repo into ChromaDB. Returns a summary dict."""
     repo_path = Path(repo_path).resolve()
-    repo_name = repo_path.name
+    repo_name = repo_name or repo_path.name
     commit_hash = get_git_commit_hash(repo_path)
 
     client = get_client(persist_dir)

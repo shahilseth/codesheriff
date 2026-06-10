@@ -6,7 +6,7 @@ agrees on the same shape, and validation happens at the boundary instead of
 deep inside an agent.
 """
 
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import BaseModel
 
@@ -115,11 +115,12 @@ class SynthesiserOutput(BaseModel):
 class QueryRequest(BaseModel):
     question: str
     repo_name: str
-    repo_path: str
+    repo_path: Optional[str] = None
 
 
 class IndexRequest(BaseModel):
-    repo_path: str
+    repo_url: Optional[str] = None
+    repo_path: Optional[str] = None
     repo_name: str
 
 
